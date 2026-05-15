@@ -54,9 +54,10 @@ export function LineSeriesChart({ series, height = 280 }: LineSeriesChartProps) 
             background: "#15151f",
             border: "1px solid #26262e",
             borderRadius: 12,
-            color: "#e4e4e7",
             fontSize: 12,
           }}
+          itemStyle={{ color: "#e4e4e7" }}
+          labelStyle={{ color: "#a1a1aa" }}
         />
         <Legend wrapperStyle={{ fontSize: 12, color: "#a1a1aa" }} />
         {series.map((s, idx) => (

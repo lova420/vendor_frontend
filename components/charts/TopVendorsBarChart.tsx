@@ -53,9 +53,10 @@ export function TopVendorsBarChart({ data, height = 280 }: TopVendorsBarChartPro
             background: "#15151f",
             border: "1px solid #26262e",
             borderRadius: 12,
-            color: "#e4e4e7",
             fontSize: 12,
           }}
+          itemStyle={{ color: "#e4e4e7" }}
+          labelStyle={{ color: "#a1a1aa" }}
         />
         <Bar dataKey="count" radius={[0, 6, 6, 0]} fill="#a855f7" />
       </BarChart>
