@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(
+      1200px 600px at 20% -10%,
+      rgba(168, 85, 247, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 90% 110%,
+      rgba(45, 212, 191, 0.08),
+      transparent 60%
+    ),
+    #0b0b14;
+  color: #e4e4e7;
+  min-height: 100vh;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+}
+
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a35 transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #2a2a35;
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toastBar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1) rotate(180deg); opacity: 1; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+@keyframes gradientBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes skeleton {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes qrRingSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(168, 85, 247, 0.15); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease both;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-sparkle {
+  animation: sparkle 1.2s ease-in-out forwards;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+.gradient-border {
+  position: relative;
+  background:
+    linear-gradient(#15151f, #15151f) padding-box,
+    linear-gradient(135deg, #a855f7, #2dd4bf, #a855f7) border-box;
+  background-size: 100% 100%, 200% 100%;
+  border: 1px solid transparent;
+  animation: gradientBorder 4s linear infinite;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(168,85,247,0.06), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+
+@layer components {
+  /* ==================== BUTTONS ==================== */
+  .pill-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-semibold text-white;
+    background-image: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #a855f7 100%);
+    background-size: 200% auto;
+    box-shadow: 0 6px 24px -8px rgba(168, 85, 247, 0.55),
+                inset 0 1px 0 0 rgba(255,255,255,0.15);
+    transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pill-primary:hover {
+    background-position: right center;
+    box-shadow: 0 8px 32px -6px rgba(168, 85, 247, 0.65),
+                inset 0 1px 0 0 rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+  }
+  .pill-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 16px -4px rgba(168, 85, 247, 0.4);
+  }
+  .pill-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .pill-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill border border-border bg-transparent px-5 py-2.5 text-sm font-medium text-zinc-200;
+    transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pill-ghost:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: #454550;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -4px rgba(0,0,0,0.3);
+  }
+  .pill-ghost:active {
+    transform: translateY(0);
+  }
+
+  .pill-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-semibold text-white;
+    background-image: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 6px 24px -8px rgba(239, 68, 68, 0.5);
+    transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pill-danger:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  .pill-teal {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-semibold text-bg;
+    background-image: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%);
+    box-shadow: 0 6px 24px -8px rgba(45, 212, 191, 0.5);
+    transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pill-teal:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px -6px rgba(45, 212, 191, 0.6);
+  }
+
+  /* ==================== SURFACES ==================== */
+  .surface {
+    @apply rounded-2xl border border-border bg-bg-elevated/80;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .surface:hover {
+    border-color: #32323e;
+  }
+
+  .surface-glass {
+    @apply rounded-2xl border border-white/[0.08];
+    background: rgba(21, 21, 31, 0.6);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 0 rgba(255,255,255,0.05);
+  }
+
+  /* ==================== INPUTS ==================== */
+  .input-base {
+    @apply w-full rounded-xl border border-border bg-bg-inset px-4 py-2.5 text-sm text-zinc-100 placeholder:text-muted-dim;
+    transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .input-base:focus {
+    @apply outline-none;
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2), 0 4px 12px -4px rgba(168, 85, 247, 0.1);
+    background: rgba(10, 10, 18, 0.9);
+  }
+  .input-base:hover:not(:focus) {
+    border-color: #35353f;
+  }
+
+  .label-base {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted;
+  }
+
+  /* ==================== CHIPS ==================== */
+  .chip {
+    @apply inline-flex cursor-pointer select-none items-center justify-center rounded-pill border border-border bg-bg-inset px-4 py-2 text-sm text-zinc-200;
+    transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .chip:hover {
+    border-color: #454550;
+    background: rgba(255,255,255,0.04);
+    transform: translateY(-1px);
+  }
+  .chip[data-selected="true"] {
+    background-image: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 16px -4px rgba(168, 85, 247, 0.4);
+  }
+
+  /* ==================== TABLE STYLES ==================== */
+  .table-row-hover {
+    transition: background-color 200ms ease;
+  }
+  .table-row-hover:hover {
+    background-color: rgba(255,255,255,0.03);
+  }
+}
