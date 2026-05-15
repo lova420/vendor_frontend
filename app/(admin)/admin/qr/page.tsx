@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { DownloadIcon, SearchIcon } from "@/components/Icons";
 import { PageHeader } from "@/components/PageHeader";
 import { apiFetch, qrImageUrl } from "@/lib/api";
-import type { QrInfo, VendorDropdownItem } from "@/lib/types";
+import type { VendorDropdownItem } from "@/lib/types";
 
 export default function GenerateQrPage() {
   const [search, setSearch] = useState("");
@@ -26,12 +26,6 @@ export default function GenerateQrPage() {
   }, [vendors, search]);
 
   const selected = vendors?.find((v) => v.id === selectedId) ?? null;
-
-  const { data: info } = useQuery({
-    queryKey: ["admin", "qr", "info", selectedId],
-    queryFn: () => apiFetch<QrInfo>(`/admin/qr/${selectedId}/info`),
-    enabled: !!selectedId,
-  });
 
   return (
     <>
@@ -112,11 +106,6 @@ export default function GenerateQrPage() {
                 <h2 className="text-xl font-bold text-white">
                   {selected.name}
                 </h2>
-                {info && (
-                  <p className="mt-2 break-all text-xs text-muted bg-bg-inset/50 rounded-lg px-3 py-1.5 border border-border-subtle">
-                    {info.url}
-                  </p>
-                )}
               </div>
 
               <div className="relative group">
@@ -135,8 +124,8 @@ export default function GenerateQrPage() {
                   <img
                     src={qrImageUrl(selected.id, "png")}
                     alt={`QR for ${selected.name}`}
-                    width={256}
-                    height={256}
+                    width={192}
+                    height={192}
                     className="rounded-lg"
                   />
                 </div>
