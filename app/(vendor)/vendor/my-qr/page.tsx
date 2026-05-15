@@ -39,9 +39,6 @@ export default function MyQrPage() {
           <div className="flex flex-col items-center gap-6 animate-scaleIn">
             <div className="text-center">
               <h2 className="text-xl font-bold text-white">{info.vendor_name}</h2>
-              <p className="mt-2 break-all text-xs text-muted bg-bg-inset/50 rounded-lg px-3 py-1.5 border border-border-subtle">
-                {info.url}
-              </p>
             </div>
 
             <div className="relative group">
@@ -60,8 +57,8 @@ export default function MyQrPage() {
                 <img
                   src={vendorQrImageUrl("png")}
                   alt={`QR for ${info.vendor_name}`}
-                  width={256}
-                  height={256}
+                  width={192}
+                  height={192}
                   className="rounded-lg"
                 />
               </div>
@@ -79,12 +76,6 @@ export default function MyQrPage() {
                 </a>
               ))}
             </div>
-
-            <p className="mt-2 max-w-md text-center text-xs text-muted-dim leading-relaxed">
-              When a customer scans this code, they land on your registration page
-              and a row is added to your scan analytics — even before they submit
-              the form.
-            </p>
           </div>
         )}
       </div>
