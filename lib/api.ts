@@ -77,6 +77,16 @@ export function qrImageUrl(
   return url.toString();
 }
 
+export function vendorQrImageUrl(
+  format: "png" | "jpeg" | "svg",
+  opts: { download?: boolean } = {}
+) {
+  const url = new URL(`${API_BASE}/vendor/qr/image`);
+  url.searchParams.set("format", format);
+  if (opts.download) url.searchParams.set("download", "true");
+  return url.toString();
+}
+
 export function customersCsvUrl(filters: {
   search?: string;
   budget?: string;

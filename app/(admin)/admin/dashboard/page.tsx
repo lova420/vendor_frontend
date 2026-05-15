@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import { KpiCard } from "@/components/KpiCard";
 import { PageHeader } from "@/components/PageHeader";
@@ -13,22 +14,55 @@ import { LineSeriesChart } from "@/components/charts/LineSeriesChart";
 import { PieDistributionChart } from "@/components/charts/PieDistributionChart";
 import { TopVendorsBarChart } from "@/components/charts/TopVendorsBarChart";
 import { apiFetch } from "@/lib/api";
-import type { AdminDashboardStats } from "@/lib/types";
+import type { AdminDashboardStats, VendorDropdownItem } from "@/lib/types";
 
 function pct(n: number) {
   return `${(n * 100).toFixed(1)}%`;
 }
 
 export default function AdminDashboardPage() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["admin", "dashboard"],
-    queryFn: () => apiFetch<AdminDashboardStats>("/admin/dashboard/stats"),
+  const [vendorId, setVendorId] = useState<string>("");
+
+  const { data: vendors } = useQuery({
+    queryKey: ["admin", "vendor-dropdown"],
+    queryFn: () =>
+      apiFetch<VendorDropdownItem[]>("/admin/vendors/dropdown"),
   });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin", "dashboard", vendorId || "all"],
+    queryFn: () =>
+      apiFetch<AdminDashboardStats>("/admin/dashboard/stats", {
+        query: { vendor_id: vendorId || undefined },
+      }),
+  });
+
+  const filterControl = (
+    <select
+      className="input-base w-auto min-w-[200px]"
+      value={vendorId}
+      onChange={(e) => setVendorId(e.target.value)}
+    >
+      <option value="">All vendors</option>
+      {vendors?.map((v) => (
+        <option key={v.id} value={v.id}>
+          {v.name}
+        </option>
+      ))}
+    </select>
+  );
+
+  const selectedVendorName = vendorId
+    ? vendors?.find((v) => v.id === vendorId)?.name
+    : null;
+  const subtitle = selectedVendorName
+    ? `Filtered to ${selectedVendorName}.`
+    : "Global view across all vendors.";
 
   if (isLoading || !data) {
     return (
       <>
-        <PageHeader title="Dashboard" subtitle="Global view across all vendors." />
+        <PageHeader title="Dashboard" subtitle={subtitle} actions={filterControl} />
         <KpiSkeletonRow count={4} />
         <div className="mt-5">
           <KpiSkeletonRow count={3} />
@@ -45,13 +79,11 @@ export default function AdminDashboardPage() {
   }
 
   const k = data.kpi;
+  const showTopVendors = !vendorId && data.top_vendors.length > 0;
 
   return (
     <>
-      <PageHeader
-        title="Dashboard"
-        subtitle="Global view across all vendors."
-      />
+      <PageHeader title="Dashboard" subtitle={subtitle} actions={filterControl} />
 
       {/* KPI Row 1 */}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -99,7 +131,9 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* Charts Row 1 */}
-      <section className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-2">
+      <section
+        className={`mt-6 grid grid-cols-1 gap-5 ${showTopVendors ? "xl:grid-cols-2" : ""}`}
+      >
         <div className="surface p-6 animate-fadeInUp stagger-4">
           <h2 className="mb-4 text-sm font-semibold text-zinc-200 flex items-center gap-2">
             <span className="inline-block h-2 w-2 rounded-full bg-brand-purple" />
@@ -121,13 +155,15 @@ export default function AdminDashboardPage() {
           />
         </div>
 
-        <div className="surface p-6 animate-fadeInUp stagger-5">
-          <h2 className="mb-4 text-sm font-semibold text-zinc-200 flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-brand-teal" />
-            Top vendors by customers
-          </h2>
-          <TopVendorsBarChart data={data.top_vendors} />
-        </div>
+        {showTopVendors && (
+          <div className="surface p-6 animate-fadeInUp stagger-5">
+            <h2 className="mb-4 text-sm font-semibold text-zinc-200 flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-brand-teal" />
+              Top vendors by customers
+            </h2>
+            <TopVendorsBarChart data={data.top_vendors} />
+          </div>
+        )}
       </section>
 
       {/* Charts Row 2 — Pie charts */}
@@ -160,7 +196,9 @@ export default function AdminDashboardPage() {
           <table className="w-full text-sm">
             <thead className="bg-bg-inset/50 text-[11px] uppercase tracking-widest text-muted">
               <tr>
-                <th className="px-5 py-3 text-left font-semibold">Vendor</th>
+                {!vendorId && (
+                  <th className="px-5 py-3 text-left font-semibold">Vendor</th>
+                )}
                 <th className="px-5 py-3 text-left font-semibold">Customer</th>
                 <th className="px-5 py-3 text-left font-semibold">Phone</th>
                 <th className="px-5 py-3 text-left font-semibold">Budget</th>
@@ -172,7 +210,7 @@ export default function AdminDashboardPage() {
               {data.latest_customers.length === 0 && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={vendorId ? 5 : 6}
                     className="px-5 py-8 text-center text-muted-dim"
                   >
                     No registrations yet.
@@ -181,7 +219,7 @@ export default function AdminDashboardPage() {
               )}
               {data.latest_customers.map((c) => (
                 <tr key={c.id} className="border-t border-border-subtle table-row-hover">
-                  <td className="px-5 py-3">{c.vendor_name}</td>
+                  {!vendorId && <td className="px-5 py-3">{c.vendor_name}</td>}
                   <td className="px-5 py-3 font-medium text-zinc-100">{c.name}</td>
                   <td className="px-5 py-3 font-mono text-xs text-zinc-400">
                     {c.contact_number}

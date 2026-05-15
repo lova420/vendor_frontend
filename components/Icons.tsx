@@ -127,3 +127,11 @@ export function UploadIcon(p: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function ChevronLeftIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  );
+}

@@ -2,14 +2,15 @@
 
 import type { ReactNode } from "react";
 
-import { CarIcon, DashboardIcon, UsersIcon } from "@/components/Icons";
+import { CarIcon, DashboardIcon, QrIcon, UsersIcon } from "@/components/Icons";
 import { Sidebar, type SidebarItem } from "@/components/Sidebar";
 import { RequireRole } from "@/lib/auth";
 
 const VENDOR_NAV: SidebarItem[] = [
+  { href: "/vendor/dashboard", label: "Dashboard", icon: <DashboardIcon /> },
   { href: "/vendor/customers", label: "Customers", icon: <UsersIcon /> },
   { href: "/vendor/cars", label: "Cars", icon: <CarIcon /> },
-  { href: "/vendor/dashboard", label: "Dashboard", icon: <DashboardIcon /> },
+  { href: "/vendor/my-qr", label: "My QR", icon: <QrIcon /> },
 ];
 
 export default function VendorLayout({ children }: { children: ReactNode }) {
