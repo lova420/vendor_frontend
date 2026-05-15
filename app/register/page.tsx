@@ -3,7 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { ChipSelect } from "@/components/Chip";
 import { ArrowRightIcon } from "@/components/Icons";
@@ -20,6 +20,26 @@ import {
 const PHONE_RE = /^\d{10}$/;
 
 export default function PublicRegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <Frame>
+          <div className="flex items-center justify-center py-8 text-muted">
+            <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+              <path d="M12 2a10 10 0 0 1 10 10" strokeOpacity="1" />
+            </svg>
+            Loading…
+          </div>
+        </Frame>
+      }
+    >
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
   const params = useSearchParams();
   const vendorId = params.get("vendor_id");
 
